@@ -41,17 +41,32 @@ reg anc_share zulu post zulupost frac_post, r
 * We see an increase for the coefficients regarding zulupost and frac_post, so True
 
 
+* D)
 use "Thorell_Lamers_HW2.dta", clear
 
 * Vad var effekten av Stockholms trängselskatt på koldioxidutsläpp i Stockholms län? The varible we are intressed in is carbondioxid emissions
 * We have a G of 2 
 * We have a T of 20 from the years 1990-2010
 
-twoway ///
-    (scatter y year if treated==0, connect(l)) ///
-    (scatter y year if treated==1, connect(l)) ///
-    , xline(2008.5) xlabel(`start_year'(1)`end_year', angle(70)) ///
-    legend(label(1 "Not treated") label(2 "Treated")) t2(2000-2012) ///
-	graphregion(color(white)) saving(x1.gph, replace)
 
 
+* data
+twoway                                ///
+    (scatter co2 year if sthlm==1, connect(l)) ///
+    (scatter co2 year if sthlm==0, connect(l)) ///
+	 ,xline(2006.5) ///
+    xtick(1990(1)2010, angle(70)) ///
+    legend(label(1 "Stockholm") label(2 "Gothenburg")) ///
+    graphregion(color(white))
+
+* Delta
+egen co2_s1 = mean(cond(sthlm==1, co2, .)), by(year)
+egen co2_s0 = mean(cond(sthlm==0, co2, .)), by(year)
+
+gen delta_co2 = co2_s1 - co2_s0 
+
+scatter delta_co2 year if sthlm == 1, ///
+    connect(l sort) ///
+    xtick(1990(1)2010, angle(70)) ///
+    graphregion(color(white)) ///
+    title("Delta CO2 -- Stockholm – Gothenburg")
