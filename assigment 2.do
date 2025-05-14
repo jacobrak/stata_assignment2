@@ -70,3 +70,14 @@ scatter delta_co2 year if sthlm == 1, ///
     xtick(1990(1)2010, angle(70)) ///
     graphregion(color(white)) ///
     title("Delta CO2 -- Stockholm – Gothenburg")
+	
+* Regression
+
+gen stockholm_post = sthlm*after
+reg co2 sthlm after stockholm_post, r
+
+* All coefficients are signifiacant
+* α is gothenburg co2 with before 
+* α1STHLM is the increase in co2 for stockholm
+* γpost is after the tariff in Gothenburg(there is no tariff so the increase in co2)
+* δ(STHLMgt × postt) is the effect of the tariff in stockholm
