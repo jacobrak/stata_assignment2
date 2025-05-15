@@ -63,13 +63,14 @@ twoway                                ///
 egen co2_s1 = mean(cond(sthlm==1, co2, .)), by(year)
 egen co2_s0 = mean(cond(sthlm==0, co2, .)), by(year)
 
-gen delta_co2 = co2_s1 - co2_s0 
+gen diff_co2 = co2_s1 - co2_s0 
 
-scatter delta_co2 year if sthlm == 1, ///
-    connect(l sort) ///
+scatter diff_co2 year if sthlm == 1, ///
+    connect(l) ///
+    xline(2006.5) ///
     xtick(1990(1)2010, angle(70)) ///
-    graphregion(color(white)) ///
-    title("Delta CO2 -- Stockholm – Gothenburg")
+    title("Diff CO2 Stockholm - Gothenburg") ///
+    graphregion(color(white))
 	
 * Regression
 
